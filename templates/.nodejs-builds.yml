@@ -1,0 +1,10 @@
+# 定义一个 Node.js 构建阶段
+.base-nodejs:
+  image: yaokun/node:14.19.3
+  before_script:
+    - cnpm install
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/

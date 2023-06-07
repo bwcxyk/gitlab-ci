@@ -1,0 +1,15 @@
+# 定义一个 maven 构建阶段
+.base-maven:
+  image: maven:3.8.6-jdk-8-slim
+  script:
+    - mvn clean package -s /usr/share/maven/newconf/settings.xml -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - target/*.jar
+      - target/*.war
+
+# 定义一个 maven deploy 阶段来将构建的文件推送到 Maven 仓库
+.maven-deploy:
+  image: maven:3.8.6-jdk-8-slim
+  script:
+    - mvn clean deploy -s /usr/share/maven/newconf/settings.xml -Dmaven.test.skip=true

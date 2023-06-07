@@ -1,0 +1,17 @@
+.base-docker:
+  image: docker:latest
+  script:
+    - |
+      VERSION=$(date +%Y%m%d%H%M%S)
+      docker login -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}" "${REGISTRY_REGISTRY}"
+      docker build -t "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" .
+      docker push "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
+      echo "Docker image address: ${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
+  variables:
+    DOCKER_DRIVER: overlay2
+    REGISTRY_URL: "192.168.1.60"
+    REGISTRY_USERNAME: "admin"
+    REGISTRY_PASSWORD: "Yuanfu1211"
+    REGISTRY_REGISTRY: "192.168.1.60"
+    PROJECT_NAME: "yuanfu-tms"
+    APP_NAME: "test"

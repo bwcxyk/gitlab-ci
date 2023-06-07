@@ -1,0 +1,39 @@
+include:
+  - project: 'other/gitlab-ci'
+    file:
+      - '/templates/.maven-builds.yml'
+      - '/templates/.docker-builds.yml'
+      - '/templates/.deploys.yml'
+
+variables:
+  DOCKER_IMAGE_NAME: "test"
+  REGISTRY_PROJECT: "yuanfu-tms"
+
+stages:
+  - build
+  - docker-build
+  - deploy
+
+# 构建阶段
+build:
+  stage: build
+  extends: .base-maven
+  only:
+    - demo
+
+# Docker 镜像构建阶段
+docker-build:
+  stage: docker-build
+  extends: .base-docker
+  variables:
+    PROJECT_NAME: $REGISTRY_PROJECT
+    APP_NAME: $DOCKER_IMAGE_NAME
+  only:
+    - demo
+
+# 部署阶段
+deploy:
+  stage: deploy
+  extends: .base-deploy
+  only:
+    - demo

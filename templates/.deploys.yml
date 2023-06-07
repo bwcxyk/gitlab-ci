@@ -1,0 +1,4 @@
+.base-deploy:
+  image: busybox:latest
+  script:
+    - echo "test......"
