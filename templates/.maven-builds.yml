@@ -13,3 +13,6 @@
   image: maven:3.8.6-jdk-8-slim
   script:
     - mvn clean deploy -s /usr/share/maven/newconf/settings.xml -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - '**/target/*.jar'
