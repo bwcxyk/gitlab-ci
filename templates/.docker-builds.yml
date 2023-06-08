@@ -12,13 +12,13 @@
   image: docker:latest
   script:
     - |
-      echo $(date +%Y%m%d%H%M%S) > version.txt
-      VERSION=$(cat version.txt)
+      VERSION=$(date +%Y%m%d%H%M%S)
       docker login -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}" "${REGISTRY_URL}"
       docker build -t "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" .
       docker push "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
       echo "Docker image address: ${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
+      echo "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" > image.txt
 
   artifacts:
     paths:
-      - version.txt
+      - image.txt

@@ -2,7 +2,7 @@
   image: busybox:latest
   script:
     - |
-      VERSION=$(cat version.txt)
+      VERSION=$(cat image.txt)
       echo "$VERSION"
 
   dependencies:

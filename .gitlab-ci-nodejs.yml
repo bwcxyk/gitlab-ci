@@ -1,12 +1,13 @@
 include:
   - project: 'other/gitlab-ci'
     file:
-      - '/templates/.maven-builds.yml'
+      - '/templates/.nodejs-builds.yml'
       - '/templates/.docker-builds.yml'
-      - '/templates/.deploys.yml'
+      - '/templates/.k8s-deploys.yml'
 
 variables:
-  DOCKER_IMAGE_NAME: "test"
+  K8S_NAME_SPACE: "yjtms"
+  DOCKER_IMAGE_NAME: "node-tms"
   REGISTRY_PROJECT: "yuanfu-tms"
 
 stages:
@@ -17,9 +18,7 @@ stages:
 # 构建阶段
 build:
   stage: build
-  extends: .base-maven
-  only:
-    - demo
+  extends: .base-nodejs
 
 # Docker 镜像构建阶段
 docker-build:
@@ -28,12 +27,14 @@ docker-build:
   variables:
     PROJECT_NAME: $REGISTRY_PROJECT
     APP_NAME: $DOCKER_IMAGE_NAME
-  only:
-    - demo
 
 # 部署阶段
 deploy:
   stage: deploy
   extends: .base-deploy
+  variables:
+    K8S_NAME_SPACE: $K8S_NAME_SPACE
+    PROJECT_NAME: $REGISTRY_PROJECT
+    APP_NAME: $DOCKER_IMAGE_NAME
   only:
-    - demo
+    - develop
