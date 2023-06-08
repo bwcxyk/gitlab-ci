@@ -6,7 +6,7 @@
     PROJECT_NAME: "yuanfu-tms"
     APP_NAME: "test"
 
-  image: kubectl:latest
+  image: bitnami/kubectl:latest
   script:
     - |
       VERSION=$(cat version.txt)
