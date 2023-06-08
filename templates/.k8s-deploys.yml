@@ -1,0 +1,19 @@
+.base-deploy:
+
+  variables:
+    K8S_NAME_SPACE: default
+    REGISTRY_REGISTRY: "192.168.1.60"
+    PROJECT_NAME: "yuanfu-tms"
+    APP_NAME: "test"
+
+  image: kubectl:latest
+  script:
+    - |
+      VERSION=$(cat version.txt)
+      echo "$VERSION"
+      kubectl version
+    # - kubectl get deployments.apps -n ${K8S_NAME_SPACE}
+    # - kubectl set image deployment/${APP_NAME} ${APP_NAME}=${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION} --record
+
+  dependencies:
+    - docker-build

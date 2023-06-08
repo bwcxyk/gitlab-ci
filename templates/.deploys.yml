@@ -1,4 +1,9 @@
 .base-deploy:
   image: busybox:latest
   script:
-    - echo "test......"
+    - |
+      VERSION=$(cat version.txt)
+      echo "$VERSION"
+
+  dependencies:
+    - docker-build

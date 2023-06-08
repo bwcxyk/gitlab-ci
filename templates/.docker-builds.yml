@@ -1,13 +1,7 @@
 .base-docker:
-  image: docker:latest
-  script:
-    - |
-      VERSION=$(date +%Y%m%d%H%M%S)
-      docker login -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}" "${REGISTRY_REGISTRY}"
-      docker build -t "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" .
-      docker push "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
-      echo "Docker image address: ${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
+
   variables:
+    DOCKER_BUILDKIT: 0
     DOCKER_DRIVER: overlay2
     REGISTRY_URL: "192.168.1.60"
     REGISTRY_USERNAME: "admin"
@@ -15,3 +9,17 @@
     REGISTRY_REGISTRY: "192.168.1.60"
     PROJECT_NAME: "yuanfu-tms"
     APP_NAME: "test"
+
+  image: docker:latest
+  script:
+    - |
+      echo $(date +%Y%m%d%H%M%S) > version.txt
+      VERSION=$(cat version.txt)
+      docker login -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}" "${REGISTRY_REGISTRY}"
+      docker build -t "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" .
+      docker push "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
+      echo "Docker image address: ${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
+
+  artifacts:
+    paths:
+      - version.txt
