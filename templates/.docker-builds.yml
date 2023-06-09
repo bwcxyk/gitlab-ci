@@ -3,16 +3,16 @@
   variables:
     DOCKER_BUILDKIT: 0
     DOCKER_DRIVER: overlay2
-    REGISTRY_URL: "192.168.1.60"
-    REGISTRY_USERNAME: $REGISTRY_USERNAME
-    REGISTRY_PASSWORD: $REGISTRY_PASSWORD
+    REGISTRY_URL: ${CI_REGISTRY}
+    REGISTRY_USERNAME: $CI_REGISTRY_USERNAME
+    REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD
     PROJECT_NAME: "yuanfu-tms"
     APP_NAME: "test"
 
   image: docker:latest
   script:
     - |
-      VERSION=$(date +%Y%m%d%H%M%S)
+      VERSION=$(TZ=UTC-8 date +%Y%m%d%H%M%S)
       docker login -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}" "${REGISTRY_URL}"
       docker build -t "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" .
       docker push "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"

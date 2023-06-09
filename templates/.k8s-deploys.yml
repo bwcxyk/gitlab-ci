@@ -4,7 +4,7 @@
     K8S_PROJECT: "default"
     APP_NAME: "test"
 
-  image: bitnami/kubectl:latest
+  image: bitnami/kubectl:1.23.10
   script:
     - |
       APP_IMAGE=$(cat image.txt)
