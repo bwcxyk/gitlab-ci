@@ -1,6 +1,11 @@
 # 定义一个 Node.js 构建阶段
 .base-nodejs:
   image: yaokun/node:14.19.3
+  variables:
+    KUBERNETES_CPU_REQUEST: 1500m
+    KUBERNETES_CPU_LIMIT: 2000m
+    KUBERNETES_MEMORY_REQUEST: 2500Mi
+    KUBERNETES_MEMORY_LIMIT: 3000Mi
   before_script:
     - cnpm install
   script:

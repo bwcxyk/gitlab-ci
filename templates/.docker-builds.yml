@@ -20,5 +20,6 @@
       echo "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" > image.txt
 
   artifacts:
+    expire_in: 1 h
     paths:
       - image.txt
