@@ -1,14 +1,9 @@
 .base-deploy:
-
-  variables:
-    K8S_PROJECT: "default"
-    APP_NAME: "test"
-
   image: bitnami/kubectl:1.23.10
   script:
-    - |
-      APP_IMAGE=$(cat image.txt)
-      kubectl set image deployment/${APP_NAME} ${APP_NAME}=${APP_IMAGE} -n ${K8S_PROJECT}
-
+    - echo "Updating deployment ${K8S_DEPLOY_NAME} in namespace ${K8S_NAME_SPACE}..."
+    - kubectl set image deployment/${K8S_DEPLOY_NAME} ${K8S_DEPLOY_NAME}=${CI_REGISTRY_IMAGE}:${CI_TAG} -n ${K8S_NAME_SPACE}
+    - echo "Deployment ${K8S_DEPLOY_NAME} updated successfully."
+    - echo "Upgraded image: ${CI_REGISTRY_IMAGE}:${CI_TAG}"
   dependencies:
     - docker-build

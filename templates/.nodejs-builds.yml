@@ -3,9 +3,9 @@
   image: yaokun/node:14.19.3
   variables:
     NODE_OPTIONS: '--max-old-space-size=3072'
-    KUBERNETES_CPU_REQUEST: 1800m
-    KUBERNETES_CPU_LIMIT: 2500m
-    KUBERNETES_MEMORY_REQUEST: 4000Mi
+    KUBERNETES_CPU_REQUEST: 2000m
+    KUBERNETES_CPU_LIMIT: 3000m
+    KUBERNETES_MEMORY_REQUEST: 2000Mi
     KUBERNETES_MEMORY_LIMIT: 4500Mi
   before_script:
     - cnpm install

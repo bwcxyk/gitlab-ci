@@ -1,25 +1,14 @@
 .base-docker:
-
-  variables:
-    DOCKER_BUILDKIT: 0
-    DOCKER_DRIVER: overlay2
-    REGISTRY_URL: ${CI_REGISTRY}
-    REGISTRY_USERNAME: $CI_REGISTRY_USERNAME
-    REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD
-    PROJECT_NAME: "yuanfu-tms"
-    APP_NAME: "test"
-
-  image: docker:latest
+  stage: build
+  image: docker:cli
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - |
-      VERSION=$(TZ=UTC-8 date +%Y%m%d%H%M%S)
-      docker login -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}" "${REGISTRY_URL}"
-      docker build -t "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" .
-      docker push "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
-      echo "Docker image address: ${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}"
-      echo "${REGISTRY_URL}/${PROJECT_NAME}/${APP_NAME}:${VERSION}" > image.txt
-
-  artifacts:
-    expire_in: 1 h
-    paths:
-      - image.txt
+    - echo "Starting Docker build..."
+    - docker build -t "$CI_REGISTRY_IMAGE:${CI_TAG}" .
+    - echo "Docker build complete."
+    - echo "Pushing Docker image to registry..."
+    - docker push "$CI_REGISTRY_IMAGE:${CI_TAG}"
+    - echo "Docker image pushed successfully."
