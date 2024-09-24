@@ -6,9 +6,10 @@ include:
       - '/templates/.k8s-deploys.yml'
 
 variables:
-  K8S_NAME_SPACE: "yjtms"
-  DOCKER_IMAGE_NAME: "node-tms"
-  REGISTRY_PROJECT: "yuanfu-tms"
+  CI_REGISTRY_IMAGE: "${CI_REGISTRY}/yuanfu-tms/node-tms"
+  CI_TAG: "$CI_COMMIT_SHORT_SHA"
+  K8S_NAME_SPACE: "tms"
+  K8S_DEPLOY_NAME: "node-tms"
 
 stages:
   - build
@@ -19,22 +20,19 @@ stages:
 build:
   stage: build
   extends: .base-nodejs
+  only:
+    - develop
 
 # Docker 镜像构建阶段
 docker-build:
   stage: docker-build
   extends: .base-docker
-  variables:
-    PROJECT_NAME: $REGISTRY_PROJECT
-    APP_NAME: $DOCKER_IMAGE_NAME
+  only:
+    - develop
 
 # 部署阶段
 deploy:
   stage: deploy
   extends: .base-deploy
-  variables:
-    K8S_NAME_SPACE: $K8S_NAME_SPACE
-    PROJECT_NAME: $REGISTRY_PROJECT
-    APP_NAME: $DOCKER_IMAGE_NAME
   only:
     - develop
