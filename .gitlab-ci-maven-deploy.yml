@@ -1,0 +1,12 @@
+include:
+  - project: 'other/gitlab-ci'
+    file:
+      - '/templates/.maven-builds.yml'
+
+stages:
+  - build
+
+# 构建阶段
+build:
+  stage: build
+  extends: .maven-deploy
