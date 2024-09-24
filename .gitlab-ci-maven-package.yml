@@ -1,0 +1,36 @@
+include:
+  - project: 'other/gitlab-ci'
+    file:
+      - '/templates/.maven-builds.yml'
+      - '/templates/.docker-builds.yml'
+      - '/templates/.k8s-deploys.yml'
+
+variables:
+  CI_REGISTRY_IMAGE: "${CI_REGISTRY}/yuanfu-tms/poi-server"
+  CI_TAG: "$CI_COMMIT_SHORT_SHA"
+  K8S_NAME_SPACE: "tms"
+  K8S_DEPLOY_NAME: "poi-server"
+
+stages:
+  - build
+  - docker-build
+  - deploy
+
+# 构建阶段
+build:
+  stage: build
+  extends: .base-maven
+
+# Docker 镜像构建阶段
+docker-build:
+  stage: docker-build
+  extends: .base-docker
+  only:
+    - develop
+
+# 部署阶段
+deploy:
+  stage: deploy
+  extends: .base-deploy
+  only:
+    - develop
