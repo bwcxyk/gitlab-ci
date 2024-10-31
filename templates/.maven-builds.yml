@@ -2,7 +2,7 @@
 .base-maven:
   image: maven:3.8.6-jdk-8-slim
   script:
-    - mvn clean package -s /usr/share/maven/newconf/settings.xml -Dmaven.test.skip=true
+    - mvn clean package -Dmaven.test.skip=true
   artifacts:
     expire_in: 1 day
     paths:
@@ -13,7 +13,7 @@
 .maven-deploy:
   image: maven:3.8.6-jdk-8-slim
   script:
-    - mvn clean deploy -s /usr/share/maven/newconf/settings.xml -Dmaven.test.skip=true
+    - mvn clean deploy -Dmaven.test.skip=true
   artifacts:
     expire_in: 1 day
     paths:
