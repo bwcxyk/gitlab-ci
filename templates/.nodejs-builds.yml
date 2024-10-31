@@ -1,6 +1,6 @@
 # 定义一个 Node.js 构建阶段
 .base-nodejs:
-  image: yaokun/node:14.19.3
+  image: yaokun/node:20
   variables:
     NODE_OPTIONS: '--max-old-space-size=3072'
     KUBERNETES_CPU_REQUEST: 2000m
