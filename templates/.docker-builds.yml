@@ -1,6 +1,8 @@
 .base-docker:
   stage: build
-  image: docker:cli
+  image: docker:dind
+  variables:
+    DOCKER_BUILDKIT: "0"
   services:
     - docker:dind
   before_script:
