@@ -1,10 +1,8 @@
+# 定义 docker buil 阶段
 .base-docker:
-  stage: build
   image: docker:dind
   variables:
     DOCKER_BUILDKIT: "0"
-  services:
-    - docker:dind
   before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
