@@ -1,0 +1,11 @@
+stages:
+  - lint
+
+lint:hadolint:
+  stage: lint
+  image: hadolint/hadolint:latest-alpine
+  script:
+    - hadolint Dockerfile
+  rules:
+    - changes:
+        - Dockerfile
