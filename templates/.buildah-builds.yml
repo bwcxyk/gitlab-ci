@@ -1,0 +1,12 @@
+# 定义 buildah buil 阶段
+.base-buildah:
+  image: quay.io/buildah/stable:latest
+  before_script:
+    - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - echo "Starting Buildah build..."
+    - buildah bud -t "$CI_REGISTRY_IMAGE:${CI_TAG}" .
+    - echo "Buildah build complete."
+    - echo "Pushing Image to registry..."
+    - buildah push "$CI_REGISTRY_IMAGE:${CI_TAG}"
+    - echo "Image pushed successfully."
