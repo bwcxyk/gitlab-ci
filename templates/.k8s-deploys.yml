@@ -6,5 +6,5 @@
       kubectl set image deployment/${K8S_DEPLOY_NAME} ${K8S_DEPLOY_NAME}=${CI_REGISTRY_IMAGE}:${CI_TAG} -n ${K8S_NAME_SPACE}
       echo "Deployment ${K8S_DEPLOY_NAME} updated successfully."
       echo "Upgraded image: ${CI_REGISTRY_IMAGE}:${CI_TAG}"
-  dependencies:
-    - docker-build
+  # dependencies:
+  #   - docker-build
