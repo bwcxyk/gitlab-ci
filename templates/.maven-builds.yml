@@ -1,8 +1,14 @@
+.maven-common:
+  variables:
+    TZ: Asia/Shanghai
+
 # Maven 编译
 .maven-compile:
+  extends: .maven-common
   image: maven:3.9.9-eclipse-temurin-8-alpine
   script:
-    - mvn compile
+    - mvn -version
+    - mvn -B -T 1C verify ${MAVEN_ARGS:-}
   artifacts:
     expire_in: 1 day
     paths:
@@ -10,23 +16,28 @@
 
 # Maven SonarQube 代码质量扫描
 .maven-sonar:
+  extends: .maven-common
   image: public.ecr.aws/docker/library/maven:3.9.9-eclipse-temurin-21-alpine
   variables:
     GIT_DEPTH: "0"
   script:
+    - mvn -version
     - >
-      mvn sonar:sonar
+      mvn -B sonar:sonar
       -Dsonar.host.url=$SONAR_HOST_URL
       -Dsonar.token=$SONAR_TOKEN
       -Dsonar.qualitygate.wait=true
       -Dsonar.qualitygate.timeout=600
+      ${MAVEN_ARGS:-}
   allow_failure: false
 
 # Maven 构建
 .maven-package:
+  extends: .maven-common
   image: maven:3.9.9-eclipse-temurin-8-alpine
   script:
-    - mvn package -Dmaven.test.skip=true
+    - mvn -version
+    - mvn -B -T 1C package -Dmaven.test.skip=true ${MAVEN_ARGS:-}
   artifacts:
     expire_in: 1 day
     paths:
@@ -35,9 +46,11 @@
 
 # Maven 部署
 .maven-deploy:
+  extends: .maven-common
   image: maven:3.9.9-eclipse-temurin-8-alpine
   script:
-    - mvn deploy -Dmaven.test.skip=true
+    - mvn -version
+    - mvn -B -T 1C deploy -Dmaven.test.skip=true ${MAVEN_ARGS:-}
   artifacts:
     expire_in: 1 day
     paths:
