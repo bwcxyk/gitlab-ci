@@ -1,19 +1,43 @@
-# 定义一个 maven 构建阶段
-.base-maven:
+# Maven 编译
+.maven-compile:
   image: maven:3.9.9-eclipse-temurin-8-alpine
   script:
-    - mvn clean package -Dmaven.test.skip=true
+    - mvn compile
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - '**/target/classes/'
+
+# Maven SonarQube 代码质量扫描
+.maven-sonar:
+  image: public.ecr.aws/docker/library/maven:3.9.9-eclipse-temurin-21-alpine
+  variables:
+    GIT_DEPTH: "0"
+  script:
+    - >
+      mvn sonar:sonar
+      -Dsonar.host.url=$SONAR_HOST_URL
+      -Dsonar.token=$SONAR_TOKEN
+      -Dsonar.qualitygate.wait=true
+      -Dsonar.qualitygate.timeout=600
+  allow_failure: false
+
+# Maven 构建
+.maven-package:
+  image: maven:3.9.9-eclipse-temurin-8-alpine
+  script:
+    - mvn package -Dmaven.test.skip=true
   artifacts:
     expire_in: 1 day
     paths:
       - '**/target/*.jar'
       - '**/target/*.war'
 
-# 定义一个 maven deploy 阶段来将构建的文件推送到 Maven 仓库
+# Maven 部署
 .maven-deploy:
   image: maven:3.9.9-eclipse-temurin-8-alpine
   script:
-    - mvn clean deploy -Dmaven.test.skip=true
+    - mvn deploy -Dmaven.test.skip=true
   artifacts:
     expire_in: 1 day
     paths:
