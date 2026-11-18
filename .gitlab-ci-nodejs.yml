@@ -2,7 +2,7 @@ include:
   - project: 'other/gitlab-ci'
     file:
       - '/templates/.nodejs.yml'
-      - '/templates/.docker.yml'
+      - '/templates/.buildah.yml'
       - '/templates/.k8s.yml'
 
 variables:
@@ -13,7 +13,7 @@ variables:
 
 stages:
   - build
-  - docker-build
+  - images-build
   - deploy
 
 # 构建阶段

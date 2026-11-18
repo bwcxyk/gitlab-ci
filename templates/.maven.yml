@@ -8,7 +8,7 @@
   image: maven:3.9.9-eclipse-temurin-8-alpine
   script:
     - mvn -version
-    - mvn -B -T 1C compile ${MAVEN_ARGS:-}
+    - mvn -B -T 1C verify ${MAVEN_ARGS:-}
   artifacts:
     expire_in: 1 day
     paths:
