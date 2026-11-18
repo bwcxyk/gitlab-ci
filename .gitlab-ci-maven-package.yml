@@ -1,19 +1,33 @@
+spec:
+  inputs:
+    MAVEN_ARGS:
+      default: ""
+      description: "Additional Maven arguments"
+    REGISTRY:
+      default: "local"
+      description: "镜像仓库"
+      options:
+        - "local"
+        - "aliyun"
+        - "huaweicloud"
+---
+
 include:
   - project: 'other/gitlab-ci'
     file:
-      - '/templates/.maven-builds.yml'
-      - '/templates/.docker-builds.yml'
-      - '/templates/.k8s-deploys.yml'
+      - '/templates/.maven.yml'
+      - '/templates/.buildah.yml'
+      - '/templates/.k8s.yml'
 
 variables:
-  CI_REGISTRY_IMAGE: "${CI_REGISTRY}/yuanfu-tms/poi-server"
+  CI_REGISTRY_IMAGE: "${CI_REGISTRY}/yuanfu-tms/tms"
   CI_TAG: "$CI_COMMIT_SHORT_SHA"
   K8S_NAME_SPACE: "tms"
-  K8S_DEPLOY_NAME: "poi-server"
+  K8S_DEPLOY_NAME: "tms"
 
 stages:
   - build
-  - docker-build
+  - images-build
   - deploy
 
 # 构建阶段
@@ -21,10 +35,10 @@ build:
   stage: build
   extends: .base-maven
 
-# Docker 镜像构建阶段
-docker-build:
-  stage: docker-build
-  extends: .base-docker
+# 容器镜像构建阶段
+images-build:
+  stage: images-build
+  extends: .base-buildah
   only:
     - develop
 
@@ -34,3 +48,5 @@ deploy:
   extends: .base-deploy
   only:
     - develop
+  dependencies:
+    - images-build

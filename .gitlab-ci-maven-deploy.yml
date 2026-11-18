@@ -1,7 +1,7 @@
 include:
   - project: 'other/gitlab-ci'
     file:
-      - '/templates/.maven-builds.yml'
+      - '/templates/.maven.yml'
 
 stages:
   - build

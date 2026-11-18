@@ -7,4 +7,4 @@
       echo "Deployment ${K8S_DEPLOY_NAME} updated successfully."
       echo "Upgraded image: ${CI_REGISTRY_IMAGE}:${CI_TAG}"
   # dependencies:
-  #   - docker-build
+  #   - images-build

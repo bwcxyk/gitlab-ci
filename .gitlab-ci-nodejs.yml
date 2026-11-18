@@ -1,9 +1,9 @@
 include:
   - project: 'other/gitlab-ci'
     file:
-      - '/templates/.nodejs-builds.yml'
-      - '/templates/.docker-builds.yml'
-      - '/templates/.k8s-deploys.yml'
+      - '/templates/.nodejs.yml'
+      - '/templates/.docker.yml'
+      - '/templates/.k8s.yml'
 
 variables:
   CI_REGISTRY_IMAGE: "${CI_REGISTRY}/yuanfu-tms/node-tms"
@@ -23,10 +23,10 @@ build:
   only:
     - develop
 
-# Docker 镜像构建阶段
-docker-build:
-  stage: docker-build
-  extends: .base-docker
+# 容器镜像构建阶段
+images-build:
+  stage: images-build
+  extends: .base-buildah
   only:
     - develop
 
@@ -36,3 +36,5 @@ deploy:
   extends: .base-deploy
   only:
     - develop
+  dependencies:
+    - images-build

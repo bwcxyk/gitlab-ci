@@ -1,0 +1,39 @@
+spec:
+  inputs:
+    MAVEN_ARGS:
+      default: ""
+      description: "Additional Maven arguments"
+---
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+variables:
+  MAVEN_ARGS: "$[[ inputs.MAVEN_ARGS ]]"
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - project: other/gitlab-ci
+    file:
+      - "/templates/.maven.yml"
+
+stages:
+  - test
+  - compile
+  - quality
+
+sast:
+  stage: test
+
+compile:
+  stage: compile
+  extends: ".maven-compile"
+
+sonar:
+  stage: quality
+  extends: ".maven-sonar"
+  needs:
+    - job: compile
+      artifacts: true
